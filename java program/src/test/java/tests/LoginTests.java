@@ -6,6 +6,14 @@ import pages.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import org.testng.annotations.Listeners;
+import io.qameta.allure.testng.AllureTestNg;
+
+@Listeners({
+        AllureTestNg.class,
+        listeners.TestListener.class
+})
+
 public class LoginTests extends BaseTest {
 
     @Test
