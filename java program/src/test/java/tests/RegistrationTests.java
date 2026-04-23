@@ -1,7 +1,6 @@
 package tests;
 
 import base.BaseTest;
-import io.qameta.allure.testng.AllureTestNg;
 import org.testng.annotations.Listeners;
 import pages.*;
 
@@ -11,7 +10,6 @@ import org.testng.annotations.Test;
 import io.qameta.allure.*;
 
 @Listeners({
-        AllureTestNg.class,
         listeners.TestListener.class
 })
 
@@ -29,20 +27,28 @@ public class RegistrationTests extends BaseTest {
         HomePage home = new HomePage(driver);
         home.goToRegister();
 
+
         RegisterPage register = new RegisterPage(driver);
 
         String email = "user" + System.currentTimeMillis() + "@mail.com";
 
         Allure.step("Fill registration form");
         register.enterFirstName("John");
+        Thread.sleep(1000);
         register.enterLastName("Doe");
+        Thread.sleep(1000);
         register.enterEmail(email);
+        Thread.sleep(1000);
         register.enterTelephone("1234567890");
+        Thread.sleep(1000);
         register.enterPassword("12345");
+        Thread.sleep(1000);
         register.confirmPassword("12345");
+        Thread.sleep(1000);
 
         Allure.step("Accept policy and submit registration");
         register.acceptPolicy();
+
         register.clickContinue();
 
         AccountPage account = new AccountPage(driver);
@@ -50,7 +56,6 @@ public class RegistrationTests extends BaseTest {
         Allure.step("Verify registration success");
         Assert.assertTrue(account.isRegistrationSuccessful(), "Registration was not successful");
         Assert.assertTrue(account.isLogoutDisplayed(), "Logout option is not displayed, user might not be logged in");
-
         Allure.step("Logout");
         account.clickLogoutButton();
 
@@ -69,11 +74,12 @@ public class RegistrationTests extends BaseTest {
     @Story("Registration with errors")
     @Severity(SeverityLevel.NORMAL)
     @Description("User fails to register due to missing/invalid data")
-    public void registrationWithErrors(){
+    public void registrationWithErrors() throws InterruptedException {
 
         Allure.step("Open home page and navigate to registration");
         HomePage home = new HomePage(driver);
         home.goToRegister();
+
 
         RegisterPage register = new RegisterPage(driver);
 
@@ -81,24 +87,29 @@ public class RegistrationTests extends BaseTest {
 
         Allure.step("Partially fill registration form");
         register.enterFirstName("First");
+        Thread.sleep(1000);
         register.enterLastName("Name");
+        Thread.sleep(1000);
 
         register.acceptPolicy();
         register.clickContinue();
 
         Allure.step("Fill more fields incorrectly");
         register.enterEmail(email);
+        Thread.sleep(1000);
         register.enterTelephone("1234567890");
+        Thread.sleep(1000);
 
         register.acceptPolicy();
         register.clickContinue();
 
         register.enterPassword("123");
+        Thread.sleep(1000);
         register.confirmPassword("123");
+        Thread.sleep(1000);
 
         register.acceptPolicy();
         register.clickContinue();
-
         AccountPage account = new AccountPage(driver);
 
         Allure.step("Verify registration failed");
