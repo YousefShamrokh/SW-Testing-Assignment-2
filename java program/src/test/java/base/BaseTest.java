@@ -3,8 +3,10 @@ package base;
 import configuration.ConfigReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import utils.AllureUtils;
 
 public class BaseTest {
     protected WebDriver driver;
@@ -21,9 +23,15 @@ public class BaseTest {
         driver.get(config.get("url"));
     }
 
-    @AfterMethod
-    public void teardown() {
-        driver.quit();
+    @AfterMethod(alwaysRun = true)
+    public void teardown(ITestResult result) {
+        if (driver != null && result.getStatus() == ITestResult.FAILURE) {
+            AllureUtils.takeScreenshot(driver);
+        }
+
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     public WebDriver getDriver() {

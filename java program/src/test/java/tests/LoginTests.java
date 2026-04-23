@@ -39,9 +39,10 @@ public class LoginTests extends BaseTest {
         AccountPage account = new AccountPage(driver);
 
         Allure.step("Verify login success");
+        Thread.sleep(2000);
 //        Assert.assertTrue(account.isLogoutDisplayed());
         Assert.assertFalse(account.isLogoutDisplayed()); // Intentionally failing to test screenshot on failure
-
+        Thread.sleep(2000);
     }
 
     @Test
@@ -59,7 +60,7 @@ public class LoginTests extends BaseTest {
         LoginPage login = new LoginPage(driver);
 
         Allure.step("Enter invalid email and password");
-        login.login("wrong@email.com","wrongpass");
+        login.login("wrong@email.com","wrongPass");
         Thread.sleep(2000);
 
 
