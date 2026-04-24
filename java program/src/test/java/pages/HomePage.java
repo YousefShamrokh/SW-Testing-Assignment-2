@@ -11,7 +11,7 @@ public class HomePage {
         this.driver = driver;
     }
 
-    By myAccount = By.xpath("//span[text()='My Account']");
+    By myAccount = By.partialLinkText("My Account");
     By register = By.linkText("Register");
     By login = By.linkText("Login");
 

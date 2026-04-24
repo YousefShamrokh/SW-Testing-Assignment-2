@@ -8,7 +8,7 @@ public class LoginPage {
     WebDriver driver;
     By email = By.id("input-email");
     By password = By.id("input-password");
-    By loginBtn = By.xpath("//input[@value='Login']");
+    By loginBtn = By.cssSelector("input[value='Login']");
     By errorMessage = By.cssSelector(".alert-danger");
 
     public LoginPage(WebDriver driver){

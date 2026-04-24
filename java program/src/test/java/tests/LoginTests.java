@@ -1,7 +1,6 @@
 package tests;
 
 import base.BaseTest;
-import org.testng.annotations.BeforeMethod;
 import pages.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -15,7 +14,7 @@ public class LoginTests extends BaseTest {
         home.goToLogin();
 
         LoginPage login = new LoginPage(driver);
-        login.login("valid1234@mail.com", "valid123");
+        login.login(config.get("email"), config.get("password"));
 
         AccountPage account = new AccountPage(driver);
 
@@ -29,10 +28,9 @@ public class LoginTests extends BaseTest {
         home.goToLogin();
 
         LoginPage login = new LoginPage(driver);
-        login.login("wrong@email.com","wrongpass");
+        login.login("wrong@email.com", "wrongpass");
 
         Assert.assertTrue(login.getErrorMessage()
                 .contains("Warning: No match for E-Mail Address"));
     }
 }
-
