@@ -16,15 +16,14 @@ public class AccountPage {
     By logoutLink        = By.cssSelector("a[href*='route=account/logout']");
     By continueBtn       = By.cssSelector("a[href*='route=common/home']");
 
-    public AccountPage(WebDriver driver) {
+    public AccountPage(WebDriver driver){
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public boolean isRegistrationSuccessful() {
+    public boolean isRegistrationSuccessful(){
         try {
-            return driver.findElement(successHeader).getText()
-                    .contains("Your Account Has Been Created!");
+            return driver.findElement(successHeader).getText().contains("Your account has been created");
         } catch (org.openqa.selenium.NoSuchElementException e) {
             return false;
         }

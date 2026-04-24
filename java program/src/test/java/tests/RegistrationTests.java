@@ -1,17 +1,12 @@
 package tests;
 
 import base.BaseTest;
-import org.testng.annotations.Listeners;
 import pages.*;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import io.qameta.allure.*;
-
-@Listeners({
-        listeners.TestListener.class
-})
 
 @Epic("User Management")
 @Feature("Registration")
@@ -26,7 +21,6 @@ public class RegistrationTests extends BaseTest {
         Allure.step("Open home page and navigate to registration");
         HomePage home = new HomePage(driver);
         home.goToRegister();
-
 
         RegisterPage register = new RegisterPage(driver);
 
