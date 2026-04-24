@@ -4,6 +4,7 @@ import configuration.ConfigReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.ITestResult;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import utils.AllureUtils;
@@ -37,9 +38,5 @@ public class BaseTest {
         if (driver != null) {
             driver.quit();
         }
-    }
-
-    public WebDriver getDriver() {
-        return driver;
     }
 }
