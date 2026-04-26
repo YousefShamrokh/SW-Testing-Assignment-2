@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
@@ -23,7 +24,11 @@ public class AccountPage {
 
     public boolean isRegistrationSuccessful(){
         try {
-            return driver.findElement(successHeader).getText().contains("Your account has been created");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(successHeader));
+            String actualText = header.getText();
+            System.out.println("Header found: " + actualText);
+            return actualText.contains("Your Account Has Been Created");
         } catch (org.openqa.selenium.NoSuchElementException e) {
             return false;
         }

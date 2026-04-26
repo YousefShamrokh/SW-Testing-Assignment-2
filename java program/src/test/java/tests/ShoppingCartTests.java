@@ -6,11 +6,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.AccountPage;
 import pages.CartPage;
 import pages.HomePage;
 import pages.LoginPage;
+import utils.ExcelReader;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -18,11 +21,17 @@ import java.util.List;
 @Feature("Cart Management")
 public class ShoppingCartTests extends BaseTest {
 
-    @Test
+    @DataProvider(name = "ShoppingCartData")
+    public Object[][] getRegData() {
+        String path = "src/main/resources/testData.xlsx";
+        return ExcelReader.getTestData(path, "ShoppingDataInput");
+    }
+
+    @Test(dataProvider = "ShoppingCartData")
     @Story("Add items to cart and verify")
     @Severity(SeverityLevel.CRITICAL)
     @Description("User adds multiple items to cart and verifies they appear in the cart")
-    public void addItemsToCartAndVerify() throws InterruptedException {
+    public void addItemsToCartAndVerify(String Product1Url, String Product1Name, String Product2Url, String Product2Name) throws InterruptedException {
         Allure.step("Open home page and navigate to login");
         HomePage home = new HomePage(driver);
         home.goToLogin();
@@ -36,18 +45,18 @@ public class ShoppingCartTests extends BaseTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         Allure.step("Navigate to first product");
-        driver.get(config.get("product1Url"));
+        driver.get(Product1Url); //config.get("product1Url")
         Thread.sleep(1000);
 
-        Allure.step("Add first product (Samsung Galaxy Tab 10.1) to cart");
+        Allure.step("Add first product " + Product1Name + " to cart");
         wait.until(ExpectedConditions.elementToBeClickable(By.id("button-cart"))).click();
         Thread.sleep(1000);
 
         Allure.step("Verify success message for first product");
         CartPage cart = new CartPage(driver);
         String successMsg = cart.getSuccessMessage();
-        Assert.assertTrue(successMsg.contains("Samsung Galaxy Tab 10.1"),
-                "Success message does not mention Samsung Galaxy Tab 10.1");
+        Assert.assertTrue(successMsg.contains(Product1Name),
+                "Success message does not mention" + Product1Name);
 
         Allure.step("Navigate to shopping cart");
         cart.goToViewCart();
@@ -55,10 +64,10 @@ public class ShoppingCartTests extends BaseTest {
 
         Allure.step("Verify first product is in cart");
         List<String> cartItems = cart.getCartItemNames();
-        Assert.assertTrue(cartItems.contains("Samsung Galaxy Tab 10.1"));
+        Assert.assertTrue(cartItems.contains(Product1Name));
 
         Allure.step("Navigate to second product");
-        driver.get(config.get("product2Url"));
+        driver.get(Product2Url); //config.get("product2Url")
         Thread.sleep(1000);
 
         Allure.step("Fill product date field");
@@ -66,15 +75,15 @@ public class ShoppingCartTests extends BaseTest {
                 By.id("input-option225"))).sendKeys("2025-11-30");
         Thread.sleep(1000);
 
-        Allure.step("Add second product (HP LP3065) to cart");
+        Allure.step("Add second product "+ Product2Name + " to cart");
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.id("button-cart"))).click();
         Thread.sleep(1000);
 
         Allure.step("Verify success message for second product");
         String laptopSuccessMsg = cart.getSuccessMessage();
-        Assert.assertTrue(laptopSuccessMsg.contains("HP LP3065"),
-                "Success message does not mention HP LP3065");
+        Assert.assertTrue(laptopSuccessMsg.contains(Product2Name),
+                "Success message does not mention" + Product2Name);
 
         Allure.step("Navigate to shopping cart");
         cart.goToViewCart();
@@ -82,8 +91,8 @@ public class ShoppingCartTests extends BaseTest {
 
         Allure.step("Verify both products are in cart");
         List<String> finalCartItems = cart.getCartItemNames();
-        Assert.assertTrue(finalCartItems.contains("HP LP3065"),
-                "HP LP3065 not found in cart");
+        Assert.assertTrue(finalCartItems.contains(Product2Name),
+                Product2Name + " not found in cart");
 
         Allure.step("Logout user");
         AccountPage account = new AccountPage(driver);
