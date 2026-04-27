@@ -5,11 +5,14 @@ import io.qameta.allure.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.AccountPage;
 import pages.CategoryPage;
 import pages.HomePage;
 import pages.LoginPage;
+import utils.ExcelReader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +20,17 @@ import java.util.List;
 @Feature("Product Sorting")
 public class SortTests extends BaseTest {
 
-    @Test
+    @DataProvider(name = "SortData")
+    public Object[][] getRegData() {
+        String path = "src/main/resources/testData.xlsx";
+        return ExcelReader.getTestData(path, "SortDataInputs");
+    }
+
+    @Test(dataProvider = "SortData")
     @Story("Sort products by name ascending and descending")
     @Severity(SeverityLevel.NORMAL)
     @Description("User sorts products by name in both ascending (A-Z) and descending (Z-A) order")
-    public void sortByNameAscendingAndDescending() throws InterruptedException {
+    public void sortByNameAscendingAndDescending(String sortTab, String SortA, String SortB) throws InterruptedException {
         Allure.step("Open home page and navigate to login");
         HomePage home = new HomePage(driver);
         home.goToLogin();
@@ -32,14 +41,14 @@ public class SortTests extends BaseTest {
         login.login(config.get("email"), config.get("password"));
         Thread.sleep(1000);
 
-        Allure.step("Navigate to Phones & PDAs category");
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Phones & PDAs"))).click();
+        Allure.step("Navigate to " + sortTab +  " category");
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(sortTab))).click();
         Thread.sleep(1000);
 
         CategoryPage category = new CategoryPage(driver);
 
         Allure.step("Sort products by Name (A - Z)");
-        category.sortBy("Name (A - Z)");
+        category.sortBy(SortA);
         Thread.sleep(1000);
 
         Allure.step("Retrieve sorted product names (A-Z)");
@@ -51,7 +60,7 @@ public class SortTests extends BaseTest {
         Assert.assertEquals(ascNames, ascSorted, "Products are not sorted A-Z");
 
         Allure.step("Sort products by Name (Z - A)");
-        category.sortBy("Name (Z - A)");
+        category.sortBy(SortB);
         Thread.sleep(1000);
 
         Allure.step("Retrieve sorted product names (Z-A)");
